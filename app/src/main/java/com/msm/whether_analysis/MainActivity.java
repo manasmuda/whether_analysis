@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             String hum="";
             String co2con="";
             try {
-                response = getJSONObjectFromURL("https://api.thingspeak.com/channels/747257/feeds.json?api_key=8SFHNPQ7BRT6LHSK&results=10"); // calls method to get JSON object
+                response = getJSONObjectFromURL("https://api.thingspeak.com/channels/1178645/feeds.json?api_key=8SFHNPQ7BRT6LHSK&results=10"); // calls method to get JSON object
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -102,9 +102,14 @@ public class MainActivity extends AppCompatActivity {
                 double[] sizearr=new double[]{1,2,3,4,5,6,7,8,9,10};
 
                 for(int i12=0;i12<10;i12++){
-                    temparr[i12]=Double.parseDouble(response.getJSONArray("feeds").getJSONObject(i12).get("field1").toString());
-                    humarr[i12]=Double.parseDouble(response.getJSONArray("feeds").getJSONObject(i12).get("field2").toString());
-                    lightarr[i12]=Double.parseDouble(response.getJSONArray("feeds").getJSONObject(i12).get("field3").toString());
+                    try {
+                        temparr[i12]=Double.parseDouble(response.getJSONArray("feeds").getJSONObject(i12).get("field1").toString());
+                        humarr[i12]=Double.parseDouble(response.getJSONArray("feeds").getJSONObject(i12).get("field2").toString());
+                        lightarr[i12]=Double.parseDouble(response.getJSONArray("feeds").getJSONObject(i12).get("field3").toString());
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
                 LinearRegression tr=new LinearRegression(sizearr,temparr);
                 LinearRegression hr=new LinearRegression(sizearr,humarr );
@@ -141,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             temptext.setText(result.get("temp").toString()+" C");
             humtext.setText(result.get("hum").toString());
             co2context.setText(result.get("co2con").toString());
-            predictedtext.setText("Predicted Values:\nTemperrature:"+String.valueOf(result.get("pt"))+"\nHumidity:"+String.valueOf(result.get("ph"))+"\nLight:"+String.valueOf(result.get("pl")));
+            predictedtext.setText("Predicted Values:\nTemperrature:"+String.valueOf(result.get("pt"))+"\nHumidity:"+String.valueOf(result.get("ph"))+"\nCO2:"+String.valueOf(result.get("pl")));
 
 
         }
